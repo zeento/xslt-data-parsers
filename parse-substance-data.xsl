@@ -22,6 +22,8 @@
             <xsl:call-template name="regulationDetails"/>
             <xsl:call-template name="approvedUse"/>
             <xsl:call-template name="chemistry"/>
+            <xsl:call-template name="generalData"/>
+            <xsl:call-template name="health"/>
         </substance>
 
     </xsl:template>
@@ -136,6 +138,48 @@
             <xsl:attribute name="inChI"
                            select="normalize-space($tableChemistry/tr/td[2][preceding::td[1][contains(.,'International Chemical Identifier (InChI)')]])"/>
         </chemistry>
+    </xsl:template>
+
+    <xsl:template name="generalData">
+        <general>
+            <xsl:variable name="tableGeneralData"
+                          select="//div[@id='maincontent']//table[preceding::font[1][contains(.,'General status:')]]"/>
+
+            <xsl:attribute name="pesticideType"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Pesticide type')]])"/>
+            <xsl:attribute name="substanceGroup"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Substance group')]])"/>
+            <xsl:attribute name="masp"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Minimum active substance purity')]])"/>
+            <xsl:attribute name="knownImpurities"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Known relevant impurities')]])"/>
+            <xsl:attribute name="substanceOrigin"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Substance origin')]])"/>
+            <xsl:attribute name="moa"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Mode of action')]])"/>
+            <xsl:attribute name="casNumber"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'CAS RN')]])"/>
+            <xsl:attribute name="casName"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'CAS name')]])"/>
+            <xsl:attribute name="iupacName"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'IUPAC namee')]])"/>
+            <xsl:attribute name="ecn"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'EC number')]])"/>
+            <xsl:attribute name="cipacn"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'CIPAC number')]])"/>
+            <xsl:attribute name="usEpaCode"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'US EPA chemical code')]])"/>
+            <xsl:attribute name="pubChem"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'PubChem CID')]])"/>
+            <xsl:attribute name="mass"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Molecular mass')]])"/>
+            <xsl:attribute name="physicalState"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Physical state')]])"/>
+        </general>
+    </xsl:template>
+
+    <xsl:template name="health">
+
     </xsl:template>
 
 </xsl:stylesheet>
