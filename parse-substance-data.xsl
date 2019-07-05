@@ -224,9 +224,6 @@
                            select="normalize-space(zeento:extractIssueData($tableHealthIssues/tr[4]/td[5]//img/@src))"/>
             <xsl:attribute name="notes"
                            select="normalize-space(zeento:extractText($tableHealthIssues/tr[5]/td[2]))"/>
-            <!-- <notes>
-                 <xsl:copy-of select="zeento:extractText($tableHealthIssues/tr[5]/td[2])"/>
-             </notes>-->
         </healthIssues>
     </xsl:template>
 
@@ -263,6 +260,7 @@
             <xsl:when test="contains($el,'question.jpg')">?</xsl:when>
             <xsl:when test="contains($el,'cross.jpg')">x</xsl:when>
             <xsl:when test="contains($el,'tick.jpg')">y</xsl:when>
+            <xsl:when test="contains($el,'tick2.jpg')">-</xsl:when>
             <xsl:when test="$el">
                 <xsl:value-of select="$el"/>
             </xsl:when>
