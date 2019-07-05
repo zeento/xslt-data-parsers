@@ -1,4 +1,4 @@
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:zeento="http://zeento.cloud">
     <!--
     Pesticide Properties DataBase Markup converter
 
@@ -196,7 +196,63 @@
     </xsl:template>
 
     <xsl:template name="health">
+        <xsl:variable name="tableHealthIssues"
+                      select="//div[@id='maincontent']//table[preceding::font[1][contains(.,'Health issues:')]]"/>
 
+        <healthIssues>
+            <xsl:attribute name="carcinogen"
+                           select="normalize-space(zeento:extractIssueData($tableHealthIssues/tr[2]/td[1]//img/@src))"/>
+            <xsl:attribute name="genotoxic"
+                           select="normalize-space(zeento:extractIssueData($tableHealthIssues/tr[2]/td[2]))"/>
+            <xsl:attribute name="endocrineDisruptor"
+                           select="normalize-space(zeento:extractIssueData($tableHealthIssues/tr[2]/td[3]//img/@src))"/>
+            <xsl:attribute name="reproductionEffects"
+                           select="normalize-space(zeento:extractIssueData($tableHealthIssues/tr[2]/td[4]//img/@src))"/>
+            <xsl:attribute name="ci"
+                           select="normalize-space(zeento:extractIssueData($tableHealthIssues/tr[2]/td[5]//img/@src))"/>
+            <xsl:attribute name="neurotoxicant"
+                           select="normalize-space(zeento:extractIssueData($tableHealthIssues/tr[2]/td[6]//img/@src))"/>
+            <xsl:attribute name="respiratoryIrritant"
+                           select="normalize-space(zeento:extractIssueData($tableHealthIssues/tr[4]/td[1]//img/@src))"/>
+            <xsl:attribute name="skinIrritant"
+                           select="normalize-space(zeento:extractIssueData($tableHealthIssues/tr[4]/td[2]//img/@src))"/>
+            <xsl:attribute name="skinSensitiser"
+                           select="normalize-space(zeento:extractIssueData($tableHealthIssues/tr[4]/td[3]//img/@src))"/>
+            <xsl:attribute name="eyeIrritant"
+                           select="normalize-space(zeento:extractIssueData($tableHealthIssues/tr[4]/td[4]//img/@src))"/>
+            <xsl:attribute name="phototoxicant"
+                           select="normalize-space(zeento:extractIssueData($tableHealthIssues/tr[4]/td[5]//img/@src))"/>
+            <xsl:attribute name="notes"
+                           select="normalize-space(zeento:extractText($tableHealthIssues/tr[5]/td[2]))"/>
+            <!-- <notes>
+                 <xsl:copy-of select="zeento:extractText($tableHealthIssues/tr[5]/td[2])"/>
+             </notes>-->
+        </healthIssues>
     </xsl:template>
 
+    <xsl:function name="zeento:extractIssueData">
+        <xsl:param name="el"/>
+        <xsl:choose>
+            <xsl:when test="contains($el,'question.jpg')">?</xsl:when>
+            <xsl:when test="contains($el,'cross.jpg')">x</xsl:when>
+            <xsl:when test="contains($el,'tick.jpg')">y</xsl:when>
+            <xsl:when test="$el">
+                <xsl:value-of select="$el"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="zeento:extractText">
+        <xsl:param name="el"/>
+        <xsl:variable name="temp">
+            <xsl:for-each select="$el//text()">
+                <xsl:element name="note">
+                    <xsl:value-of select="normalize-space(.)"/>
+                    <xsl:if test="string-length(normalize-space(.))&gt;0">;</xsl:if>
+                </xsl:element>
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:value-of select="$temp"/>
+    </xsl:function>
 </xsl:stylesheet>
