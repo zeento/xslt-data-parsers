@@ -23,6 +23,7 @@
             <xsl:call-template name="chemistry"/>
             <xsl:call-template name="generalData"/>
             <xsl:call-template name="health"/>
+            <xsl:call-template name="handling"/>
         </substance>
 
     </xsl:template>
@@ -142,10 +143,9 @@
     </xsl:template>
 
     <xsl:template name="generalData">
+        <xsl:variable name="tableGeneralData"
+                      select="//div[@id='maincontent']//table[preceding::font[1][contains(.,'General status:')]]"/>
         <general>
-            <xsl:variable name="tableGeneralData"
-                          select="//div[@id='maincontent']//table[preceding::font[1][contains(.,'General status:')]]"/>
-
             <xsl:attribute name="pesticideType"
                            select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Pesticide type')]])"/>
             <xsl:attribute name="substanceGroup"
@@ -230,6 +230,33 @@
         </healthIssues>
     </xsl:template>
 
+    <xsl:template name="handling">
+        <xsl:variable name="tableHandling"
+                      select="//div[@id='maincontent']//table[preceding::font[1][contains(.,'Handling issues:')]]"/>
+
+        <handling>
+            <xsl:attribute name="general"
+                           select="normalize-space(zeento:extractText($tableHandling/tr/td[2][preceding::td[1][contains(.,'General')]]))"/>
+            <xsl:attribute name="unNumber"
+                           select="normalize-space(zeento:extractText($tableHandling/tr/td[2][preceding::td[1][contains(.,'UN Number')]]))"/>
+            <xsl:attribute name="packaging"
+                           select="normalize-space(zeento:extractText($tableHandling/tr/td[2][preceding::td[1][contains(.,'Waste disposal &amp; packaging')]]))"/>
+
+            <classification>
+                <xsl:attribute name="clp"
+                               select="normalize-space(zeento:extractText($tableHandling/tr/td[2][preceding::td[1][contains(.,'CLP classification')]]))"/>
+                <xsl:attribute name="ecRisk"
+                               select="normalize-space(zeento:extractText($tableHandling/tr/td[2][preceding::td[1][contains(.,'EC Risk Classification')]]))"/>
+                <xsl:attribute name="ecSafety"
+                               select="normalize-space(zeento:extractText($tableHandling/tr/td[2][preceding::td[1][contains(.,'EC Safety Classification')]]))"/>
+                <xsl:attribute name="who"
+                               select="normalize-space(zeento:extractText($tableHandling/tr/td[2][preceding::td[1][contains(.,'WHO Classification')]]))"/>
+            </classification>
+        </handling>
+    </xsl:template>
+
+    <!-- Utilities to parse and extract data -->
+
     <xsl:function name="zeento:extractIssueData">
         <xsl:param name="el"/>
         <xsl:choose>
@@ -248,7 +275,9 @@
             <xsl:for-each select="$el//text()">
                 <xsl:element name="note">
                     <xsl:value-of select="normalize-space(.)"/>
-                    <xsl:if test="string-length(normalize-space(.))&gt;0">;</xsl:if>
+                    <xsl:if test="string-length(normalize-space(.))&gt;0 and position()&lt;last()-1">
+                        <xsl:text>. </xsl:text>
+                    </xsl:if>
                 </xsl:element>
             </xsl:for-each>
         </xsl:variable>
