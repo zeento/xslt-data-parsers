@@ -17,8 +17,7 @@
                 </description>
             </meta>
 
-            <xsl:call-template name="header"/>
-            <xsl:call-template name="summary"/>
+            <xsl:call-template name="details"/>
             <xsl:call-template name="regulationDetails"/>
             <xsl:call-template name="approvedUse"/>
             <xsl:call-template name="chemistry"/>
@@ -28,24 +27,24 @@
 
     </xsl:template>
 
-    <xsl:template name="header">
+    <xsl:template name="details">
         <details>
             <xsl:attribute name="name" select="//div[@id='maincontent']//table[1]/tr[1]/td[2]/font/text()"/>
 
             <xsl:attribute name="description"
-                           select="normalize-space(//font[preceding::font[1][contains(.,'Description:')]]/text())"/>
+                           select="normalize-space(//font[preceding::font[1][contains(.,'Description:')]])"/>
 
             <xsl:attribute name="examplePestsControlled"
-                           select="normalize-space(//font[preceding::font[1][contains(.,'Example pests controlled:')]]/text())"/>
+                           select="normalize-space(//font[preceding::font[1][contains(.,'Example pests controlled:')]])"/>
 
             <xsl:attribute name="exampleApplications"
-                           select="normalize-space(//font[preceding::font[1][contains(.,'Example applications:')]]/text())"/>
+                           select="normalize-space(//font[preceding::font[1][contains(.,'Example applications:')]])"/>
 
             <xsl:attribute name="availabilityStatus"
-                           select="normalize-space(//font[preceding::font[1][contains(.,'Availability status:')]]/text())"/>
+                           select="normalize-space(//font[preceding::font[1][contains(.,'Availability status:')]])"/>
 
             <xsl:attribute name="introductionKeyDates"
-                           select="normalize-space(//font[preceding::font[1][contains(.,'Introduction &amp; key dates:')]]/text())"/>
+                           select="normalize-space(//font[preceding::font[1][contains(.,'Introduction &amp; key dates:')]])"/>
 
             <aliases>
                 <xsl:variable name="aliases"
@@ -58,6 +57,8 @@
                     </xsl:matching-substring>
                 </xsl:analyze-string>
             </aliases>
+
+            <xsl:call-template name="summary"/>
         </details>
     </xsl:template>
 
@@ -158,11 +159,11 @@
             <xsl:attribute name="moa"
                            select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Mode of action')]])"/>
             <xsl:attribute name="casNumber"
-                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'CAS RN')]])"/>
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'CAS RN') and not(contains(.,'/old CAS RN'))]])"/>
             <xsl:attribute name="casName"
                            select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'CAS name')]])"/>
             <xsl:attribute name="iupacName"
-                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'IUPAC namee')]])"/>
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'IUPAC name')]])"/>
             <xsl:attribute name="ecn"
                            select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'EC number')]])"/>
             <xsl:attribute name="cipacn"
@@ -175,6 +176,22 @@
                            select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Molecular mass')]])"/>
             <xsl:attribute name="physicalState"
                            select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Physical state')]])"/>
+            <xsl:attribute name="otherStatus"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Other status information')]])"/>
+            <xsl:attribute name="envWQS"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Relevant Environmental Water Quality Standards')]])"/>
+            <xsl:attribute name="hrac"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Herbicide Resistance Classification (HRAC)')]])"/>
+            <xsl:attribute name="wssa"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Herbicide Resistance Classification (WSSA)')]])"/>
+            <xsl:attribute name="irac"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Insecticide Resistance Classification (IRAC)')]])"/>
+            <xsl:attribute name="frac"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Fungicide Resistance Classification (FRAC)')]])"/>
+            <xsl:attribute name="recordedResistance"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Examples of recorded resistance')]])"/>
+            <xsl:attribute name="relatedSubstances"
+                           select="normalize-space($tableGeneralData/tr/td[2][preceding::td[1][contains(.,'Related substances &amp; organisms')]])"/>
         </general>
     </xsl:template>
 
